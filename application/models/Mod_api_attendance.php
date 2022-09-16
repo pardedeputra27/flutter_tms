@@ -172,7 +172,7 @@ Class Mod_api_attendance extends CI_Model
 
   public function valid_nik($nik){
    $this->db->where('nik',$nik);
-   $query = $this->db->get('hr.v_employee')->num_rows();
+   $query = $this->db->get('ctesystem.employee_view')->num_rows();
    if($query>0){
        return true;
    }else{
