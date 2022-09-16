@@ -135,8 +135,8 @@ Class Mod_api_attendance extends CI_Model
          $firstTime=strtotime($timeIn);
          $lastTime=strtotime($timeOut); 
          $break=1;
-         $perbedaan_waktu =1;
-         //str to time itu mengembalikan nilai default datenya (perbedaannya 1 jam)
+         $perbedaan_waktu =7;
+         //str to time itu mengembalikan nilai default datenya (perbedaannya 7 jam GMT)
          $time=$lastTime-$firstTime-(3600*($break+$perbedaan_waktu));
          $formatdate=date("H:i", $time);
 
