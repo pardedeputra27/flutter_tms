@@ -2,42 +2,25 @@
 Class Mod_api_attendance extends CI_Model
 {
  
-   public function get_Attendance($nik,$codeDate)
+   public function get_attendance($nik,$periode)
    {
-      $year = date("Y");
-      $nextYear=date('Y', strtotime('+1 year'));
-      $beforeYear=date('Y', strtotime('-1 year'));
-      switch ($codeDate) {
-         //before Year
-         case -1:  $date1 =$beforeYear.'-01-16';$date2 = $beforeYear.'-02-15';break;
-         case -2:  $date1 =$beforeYear.'-02-16';$date2 = $beforeYear.'-03-15';break;
-         case -3:  $date1 =$beforeYear.'-03-16';$date2 = $beforeYear.'-04-15';break;
-         case -4:  $date1 =$beforeYear.'-04-16';$date2 = $beforeYear.'-05-15';break;
-         case -5:  $date1 =$beforeYear.'-05-16';$date2 = $beforeYear.'-06-15';break;
-         case -6:  $date1 =$beforeYear.'-06-16';$date2 = $beforeYear.'-07-15';break;
-         case -7:  $date1 =$beforeYear.'-07-16';$date2 = $beforeYear.'-08-15';break;
-         case -8:  $date1 =$beforeYear.'-08-16';$date2 = $beforeYear.'-09-15';break;
-         case -9:  $date1 =$beforeYear.'-09-16';$date2 = $beforeYear.'-10-15';break;
-         case -10: $date1 =$beforeYear.'-10-16';$date2 = $beforeYear.'-11-15';break;
-         case -11: $date1 =$beforeYear.'-11-16';$date2 = $beforeYear.'-12-15';break;
-         case -12: $date1 =$beforeYear.'-12-16';$date2 = $year.'-01-15';break;
-         //This Year
-         case 1:  $date1 =$year.'-01-16';$date2 = $year.'-02-15';break;
-         case 2:  $date1 =$year.'-02-16';$date2 = $year.'-03-15';break;
-         case 3:  $date1 =$year.'-03-16';$date2 = $year.'-04-15';break;
-         case 4:  $date1 =$year.'-04-16';$date2 = $year.'-05-15';break;
-         case 5:  $date1 =$year.'-05-16';$date2 = $year.'-06-15';break;
-         case 6:  $date1 =$year.'-06-16';$date2 = $year.'-07-15';break;
-         case 7:  $date1 =$year.'-07-16';$date2 = $year.'-08-15';break;
-         case 8:  $date1 =$year.'-08-16';$date2 = $year.'-09-15';break;
-         case 9:  $date1 =$year.'-09-16';$date2 = $year.'-10-15';break;
-         case 10: $date1 =$year.'-10-16';$date2 = $year.'-11-15';break;
-         case 11: $date1 =$year.'-11-16';$date2 = $year.'-12-15';break;
-         //next Years
-         case 12: $date1 =$year.'-12-16';$date2 = $nextYear.'-01-15';break;
-         //default
-         default:$date1 =date('Y-m-d',strtotime('-3 days'));$date2 =date('Y-m-d');break;
+      $str = trim($periode);
+      if ($str !==null && $this->isValidFormatPeriode($str)) {   //checking periode 
+         $explode=explode("-",$str);
+         $year = (int)$explode[0];
+         $month= (int)$explode[1];
+         $call_day =cal_days_in_month(CAL_GREGORIAN,$month,$year);
+         $day_in_month=$call_day-1;
+
+         $date1 =$str.'-16';
+         $date2 =date('Y-m-d', strtotime($date1. ' + '.$day_in_month.' days'));          
+      }else{
+         $date1 =date('Y-m-d', strtotime('-3 days'));
+         $date2 =date('Y-m-d');   
       }
+      
+     
+    
        
       if($nik !== null){
          if($this->valid_nik($nik)){//checking nik
@@ -72,10 +55,10 @@ Class Mod_api_attendance extends CI_Model
             $data['date_in']=$row['date_in']          ?'Present':"-";
             $data['time_in']=$row['time_in']          ?$row['time_in']:'-';
             $data['time_out']=$row['time_out']        ?$row['time_out']:'-';
-            $data['meal']=$row['time_out']?$meal:'-'; 
-            $data['transport']=$row['time_out']?"1":'-'; 
+            $data['meal']=$row['time_out']            ?$meal:'-'; 
+            $data['transport']=$row['time_out']       ?"1":'-'; 
             $data['hours']= $hours;
-            $data['break']=$row['time_out']?"01:00":'00:00'; 
+            $data['break']=$row['time_out']           ?"01:00":'00:00'; 
             $data['absent'] =$row['absent_label']     ?$row['absent_label']:'-';
             $response['data'][] = $data;
 
@@ -178,7 +161,39 @@ Class Mod_api_attendance extends CI_Model
    }else{
        return false;
    }
-}
+ }
+
+
+ function isValidFormatPeriode($date, $format = 'Y-m'){
+   $dt = DateTime::createFromFormat($format, $date);
+   return $dt && $dt->format($format) === $date;
+ }
+
+ public function get_periode(){
+   $bulanSekarang = date('n');//(1 to 12)
+   $months = 
+   array(
+   1 => 'January', 
+   2 => 'February', 
+   3 => 'Maret', 
+   4 => 'April', 
+   5 => 'May', 
+   6 => 'June', 
+   7 => 'July', 
+   8 => 'August', 
+   9 => 'September', 
+   10 => 'October', 
+   11 => 'November', 
+   12 => 'December',
+   );
+   for ($x =$bulanSekarang ; $x>=1; $x--) {
+      $data['label'] = $months[$x];
+      $data['value']= (int)$x;
+      $response[] = $data;
+         
+   }
+   return $response;
+ }
 
 
 }

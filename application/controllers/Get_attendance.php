@@ -14,10 +14,10 @@ class Get_attendance extends REST_Controller{
     public function index_get(){
         //input
         $nik = $this->get('nik');
-        $CodeDate= (int) $this->get('periode');
+        $periode=$this->get('periode');
        
         //Get Response
-        $response = $this->model->get_Attendance($nik,$CodeDate);
+        $response = $this->model->get_attendance($nik,$periode);
         $noData = $this->model->get_empty_data();
   
             if($response){
@@ -25,7 +25,14 @@ class Get_attendance extends REST_Controller{
             }else{
                 $this->response($noData,REST_Controller::HTTP_OK);
             }
-        }
+    }
+    public function periode_get(){
+ 
+        $response = $this->model->get_periode();
+            if($response){
+                $this->response($response,REST_Controller::HTTP_OK);
+            }
+    }
 
 
 
