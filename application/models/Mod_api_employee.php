@@ -7,11 +7,13 @@ class Mod_api_employee extends CI_Model
             $this->db->where('nik',$nik);
         }else{
             return false;
+            exit;
         }
         
     }
     //$this->db->where('active',true);
     $this->db->limit(100);
+    $this->db->order_by('active','DESC');
     $query = $this->db->get('ctesystem.employee_view')->result_array();
 
     
