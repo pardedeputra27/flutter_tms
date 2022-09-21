@@ -24,13 +24,13 @@ Class Mod_api_attendance extends CI_Model
        
       if($nik !== null){
          if($this->valid_nik($nik)){//checking nik
-            $query = $this->db->query("SELECT * FROM hr.get_employee_attendance('$date1'::date,'$date2'::date) WHERE nik = '$nik' ORDER BY date asc ")->result_array();
+            $query = $this->db->query("SELECT * FROM flutter_tms.get_employee_attendance_with_nik('$date1'::date,'$date2'::date,'$nik')ORDER BY date asc ")->result_array();
          }else{
                return false;
                exit;
          }  
       }else{
-         $query = $this->db->query("SELECT * FROM hr.get_employee_attendance('$date1'::date,'$date2'::date) ORDER BY date asc  LIMIT 100 ")->result_array();
+         $query = $this->db->query("SELECT * FROM flutter_tms.get_employee_attendance('$date1'::date,'$date2'::date) ORDER BY date asc  LIMIT 100 ")->result_array();
       }
 
 
@@ -51,7 +51,7 @@ Class Mod_api_attendance extends CI_Model
             $data['name'] =$row['fullname']           ?$row['fullname']:'-';
             $data['department'] =$row['dept_label']   ?$row['dept_label']:'-';
             $data['jabatan'] =$row['jabatan_label']   ?$row['jabatan_label']:'-';
-            $data['shift'] =$row['shift_in'].'-'.$row['shift_out'];
+            $data['shift'] =$row['shift_in']          ?$row['shift_in'].'-'.$row['shift_out']:'-';
             $data['date_in']=$row['date_in']          ?'Present':"-";
             $data['time_in']=$row['time_in']          ?$row['time_in']:'-';
             $data['time_out']=$row['time_out']        ?$row['time_out']:'-';

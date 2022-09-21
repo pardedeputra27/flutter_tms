@@ -14,6 +14,7 @@ class Get_employee extends REST_Controller{
     public function index_get(){
         //input
         $nik = $this->get('nik');
+
         $response = $this->model->get_employee($nik);
         $noData = $this->model->get_employee_empty();
        
@@ -25,18 +26,9 @@ class Get_employee extends REST_Controller{
     }
 
 
-    function coba(){
-        $time = strtotime("2022-07-16");
-
-        $a=cal_days_in_month(CAL_GREGORIAN,9,2022);
-        $b=$a-1;
-
-        $final = date("Y-m-d", strtotime("+".$b."days", $time));
-
-
-        echo $final;
+    public function coba_get(){
+        print_r($this->model->coba());
     }
-
 }
 
 

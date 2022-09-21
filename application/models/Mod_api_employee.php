@@ -2,30 +2,32 @@
 class Mod_api_employee extends CI_Model
 {
  public function get_employee($nik){
-    if ($nik!==null) {
-        if($this->valid_nik($nik)){
+    if ($nik!==null ) {
+        if ($this->valid_nik($nik)) {
             $this->db->where('nik',$nik);
         }else{
             return false;
-            exit;
         }
         
     }
     //$this->db->where('active',true);
-
+    $this->db->limit(100);
     $query = $this->db->get('ctesystem.employee_view')->result_array();
+
+    
     if (count($query)>0) {
-        foreach($query as $rows){
+        $response=array();
+        foreach($query as $row){
             $data = array();
-            $data['nik'] = $rows['nik'];
-            $data['name'] = $rows['fullname'];
-            $data['department_code'] =$rows['dept_code']; 
-            $data['department_label'] =$rows['dept_label']; 
-            $data['position_code'] = $rows['occupation_code'];
-            $data['position_label'] = $rows['occupation_label'];
-            $data['active'] = $rows['active'];
-        }
-        $response[]=$data;
+            $data['nik'] = $row['nik']?$row['nik']:'-';
+            $data['name'] = $row['fullname']?$row['fullname']:'-';
+            $data['department_code'] =$row['dept_code']?$row['dept_code']:'-'; 
+            $data['department_label'] =$row['dept_label']?$row['dept_label']:'-'; 
+            $data['position_code'] = $row['occupation_code']?$row['occupation_code']:'-';
+            $data['position_label'] = $row['occupation_label']?$row['occupation_label']:'-';
+            $data['active'] = $row['active']?$row['active']:'-';
+            $response[]=$data;
+        } 
         return $response;
     }else{
         return false;
@@ -54,5 +56,10 @@ class Mod_api_employee extends CI_Model
     $response[]=$data;
     return $response;
 
+ }
+
+
+ function coba(){
+    return $this->db->get('ctesystem.employee_view')->result_array() ; 
  }
 }
