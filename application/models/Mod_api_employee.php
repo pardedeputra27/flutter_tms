@@ -14,7 +14,7 @@ class Mod_api_employee extends CI_Model
     //$this->db->where('active',true);
     $this->db->limit(100);
     $this->db->order_by('active','DESC');
-    $query = $this->db->get('ctesystem.employee_view')->result_array();
+    $query = $this->db->get('flutter_tms.v_all_employee')->result_array();
 
     
     if (count($query)>0) {
@@ -25,8 +25,8 @@ class Mod_api_employee extends CI_Model
             $data['name'] = $row['fullname']?$row['fullname']:'-';
             $data['department_code'] =$row['dept_code']?$row['dept_code']:'-'; 
             $data['department_label'] =$row['dept_label']?$row['dept_label']:'-'; 
-            $data['position_code'] = $row['occupation_code']?$row['occupation_code']:'-';
-            $data['position_label'] = $row['occupation_label']?$row['occupation_label']:'-';
+            $data['position_code'] = $row['position_code']?$row['position_code']:'-';
+            $data['position_label'] = $row['position_label']?$row['position_label']:'-';
             $data['active'] = $row['active']?$row['active']:'-';
             $response[]=$data;
         } 
@@ -38,7 +38,7 @@ class Mod_api_employee extends CI_Model
  }
  public function valid_nik($nik){
     $this->db->where('nik',$nik);
-    $query = $this->db->get('ctesystem.employee_view')->num_rows();
+    $query = $this->db->get('flutter_tms.v_all_employee')->num_rows();
     if($query>0){
         return true;
     }else{
@@ -62,6 +62,6 @@ class Mod_api_employee extends CI_Model
 
 
  function coba(){
-    return $this->db->get('ctesystem.employee_view')->result_array() ; 
+    return $this->db->get('flutter_tms.v_all_employee')->result_array() ; 
  }
 }
